@@ -9,26 +9,26 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.4.3/dist/tfjs-vis.umd.min.js"></script>
-  <script src="scriptL.js"></script>
-  <title>TensorFlow Linear Regression</Linear></title>
+  <script src="scriptB.js"></script>
+  <title>TensorFlow Binary Classification</title>
 </head>
 
 <body>
   <!--   HEADER   -->
 <div class="section no-pad-bot" id="index-banner">
   <div class="container">
-    <h5 class="header center blue-text small">Linear regression with COVID dataset</h5>
+    <h5 class="header center -text small">Binary Classification with COVID dataset</h5>
     <div class="row center">
-      <h6 class="header col s12 light">Train a model to predict how many people will recover from COVID vs. how many were infected.</h6>
+      <h6 class="header col s12 light">Train a model to predict a class.</h6>
     </div>
   </div>
 </div>
 
 <!--   BUTTONS   -->
-<div class="section no-pad-bot light-blue lighten-4">
+<div class="section no-pad-bot light-green lighten-4">
   <div class="container">
     <div class="row center">
-      <button id="toggle-button" class="waves-effect waves-light light-blue btn-small" onclick="toggleVisor()">Toggle Visor</button>
+      <button id="toggle-button" class="waves-effect waves-light light-green btn-small" onclick="toggleVisor()">Toggle Visor</button>
       <br/><br/>
     </div>
   </div>
@@ -42,7 +42,7 @@
       <!--   TRAINING   -->
       <div class="col s12 m6">
         <div class="icon-block">
-          <h3 class="center light-blue-text"><i class="material-icons" style="font-size: 2em">build</i></h3>
+          <h3 class="center light-green-text"><i class="material-icons" style="font-size: 2em">build</i></h3>
           <h5 class="center">Train & Test</h5>
 
           <p class="light"></p>
@@ -54,31 +54,32 @@
             <p><label>Testing status:</label></p>
             <pre class="grey lighten-4" style="overflow-x: auto"><em id="testing-status">Not yet tested</em></pre>
 
-            <button autocomplete="off" id="train-button" class="waves-effect light-blue waves-light btn" disabled onclick="train()">Train New Model</button>
-            <button autocomplete="off" id="test-button" class="waves-effect light-blue waves-light btn" disabled onclick="test()">Test Model</button>
+            <button autocomplete="off" id="train-button" class="waves-effect light-green waves-light btn" disabled onclick="train()">Train New Model</button>
+            <button autocomplete="off" id="test-button" class="waves-effect light-green waves-light btn" disabled onclick="test()">Test Model</button>
           </div>
           <br/>
 
           <div>
-            <button autocomplete="off" id="load-button" class="waves-effect light-blue waves-light btn-small" disabled onclick="load()">Load Model</button>
-            <button autocomplete="off" id="save-button" class="waves-effect light-blue waves-light btn-small" disabled onclick="save()">Save Model</button>
+            <button autocomplete="off" id="load-button" class="waves-effect light-green waves-light btn-small" disabled onclick="load()">Load Model</button>
+            <button autocomplete="off" id="save-button" class="waves-effect light-green waves-light btn-small" disabled onclick="save()">Save Model</button>
           </div>
 
         </div>
       </div>
 
       <!--   PREDICTION   -->
+      <!--   Prediction   -->
       <div class="col s12 m6">
         <div class="icon-block">
-          <h3 class="center light-blue-text"><i class="material-icons" style="font-size: 2em">timeline</i></h3>
+          <h3 class="center light-green-text"><i class="material-icons">timeline</i></h3>
           <h5 class="center">Predict</h5>
 
-          <label>How many people were declared positive: <input type="number" id="prediction-input" placeholder="2000"/></label>
-          <button autocomplete="off" id="predict-button" class="waves-effect light-blue waves-light btn" disabled onclick="predict()">Death predictions</button>
+          <label>Confirmed: <input type="number" id="prediction-input-1" placeholder="2000000"/></label>
+          <label>Deaths: <input type="number" id="prediction-input-2" placeholder="20000"/></label>
+          <button autocomplete="off" id="predict-button" class="waves-effect light-green waves-light btn" disabled onclick="predict()">Predict class</button>
           <p><strong id="prediction-output"></strong></p>
         </div>
       </div>
-    </div>
 
   </div>
 </div>

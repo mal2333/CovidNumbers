@@ -15,7 +15,7 @@ function createModel(){
   model.add(tf.layers.dense({
     inputDim: 1,
     units: 1,
-    activation: 'linear',
+    activation: 'sigmoid',
     useBias: true,
   }));
   const optimizer = tf.train.adam();
@@ -39,11 +39,11 @@ async function trainModel(model, trainingFeatureTensor, trainingLabelTensor){
     callbacks: {
       //onBatchEnd,
       onEpochEnd,
-      //onEpochBegin: async function(){
-      //  await plotPredictionLine();
-      //  const layer = model.getLayer(undefined,0);
-      //  tfvis.show.layer({name:"Layer1"},layer);
-      //}
+      onEpochBegin: async function(){
+        await plotPredictionLine();
+        const layer = model.getLayer(undefined,0);
+        tfvis.show.layer({name:"Layer1"},layer);
+      }
     }
   });
 }
@@ -66,7 +66,7 @@ async function run(){
   }
 
   tf.util.shuffle(points);
-  plot(points);
+  plot(points, "Confirmed");
 
   //Extract x and y and put them into tensors
   const featureValues = points.map(p => p.x);
@@ -142,9 +142,10 @@ async function test() {
 //-----NORMALISE THE DATA
 function normalise(tensor, previousMin = null, previousMax = null) {
   //if no previous min and max, calculate otherwise they have priority
-  const max = previousMin || tensor.max();
-  const min = previousMax || tensor.min();
+  const max = previousMax || tensor.max();
+  const min = previousMin || tensor.min();
   const normalisedTensor = tensor.sub(min).div(max.sub(min));
+
   return {
     tensor: normalisedTensor,
     min,
@@ -203,16 +204,12 @@ async function predict() {
     tf.tidy(() => {//memory management as dealing with tensors
       //1D tensor normalised
       const inputTensor = tf.tensor1d([predictionInput]);
-            console.log(inputTensor);
       const normalisedInput = normalise(inputTensor, normalisedFeature.min, normalisedFeature.max);
-      console.log(normalisedFeature.min);
-      console.log(normalisedFeature.max);
       const normalisedOutputTensor = model.predict(normalisedInput.tensor);
 
       //Denormalise output
       const outputTensor = denormalise(normalisedOutputTensor, normalisedLabel.min, normalisedLabel.max);
       const outputValue = outputTensor.dataSync()[0];
-      console.log(outputValue);
       const outputValueRounded = outputValue.toFixed(0);
 
       document.getElementById("prediction-output").innerHTML = `The predicted number of deaths is <br>`
@@ -224,18 +221,19 @@ async function predict() {
 //-----PLOT THE DATA
 async function plot(pointsArray, featureName, predictedPointsArray = null) {
 
-  const values = [pointsArray.slice(0, 1000)];
-  //const series = ["original"];
+  //const values = [pointsArray.slice(0, 1000)];
+  const values = [pointsArray];
+  const series = ["original"];
   if (Array.isArray(predictedPointsArray)) {
     values.push(predictedPointsArray);
-    //series.push("predicted");
+    series.push("predicted");
   }
 
   tfvis.render.scatterplot(
     {name: `${featureName} vs Deaths cases`},
-    {values: [points]},
+    {values, series},
     {
-      xLabel: 'Confirmed',
+      xLabel: featureName,
       yLabel: 'Deaths',
     });
 }
@@ -256,7 +254,7 @@ async function plotPredictionLine(){
   const predictedPoints = Array.from(xs).map((val, index) => {
     return { x: val, y: ys[index] };
     });
-    await plot(points, "Deaths", predictedPoints);
+    await plot(points, "Confirmed", predictedPoints);
 }
 
 //PLOT PARAMETERS FUNCTION (to try different weights and biases in console)
