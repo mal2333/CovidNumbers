@@ -1,2 +1,1 @@
-# CovidNumbers
- ML using tensorflow.js
+# Tensorflow.js Udemy class Labs
